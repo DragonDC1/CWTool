@@ -69,6 +69,15 @@ public class Window {
         frame.setResizable(false);
         frame.setLayout(null);
 
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                clan.saveToFile("clan.txt");
+
+                super.windowClosing(e);
+            }
+        });
+
         labelClan = CompCreator.createLabel(clan.getName(), -1, -1, 100, 50, 25, true);
 
         frame.add(labelClan);

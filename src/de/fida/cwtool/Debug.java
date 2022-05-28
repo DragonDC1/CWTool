@@ -57,8 +57,6 @@ public class Debug {
 
         Window window = new Window();
         window.init(jkdo);
-
-        //jkdo.saveToFile("player.ser");
     }
 
     private static Clan loadClan(String name) {
