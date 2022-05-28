@@ -30,6 +30,8 @@ public class Window {
 
         loadImages();
 
+        //Zest
+
         frame = new JFrame(TITLE);
         frame.setSize(WIDTH, HEIGHT);
         frame.setLocationRelativeTo(null);
