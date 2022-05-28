@@ -10,17 +10,17 @@ public class Debug {
     public static void main(String[] args) throws Exception {
         //Clan clan = loadClan("player.ser");
 
-        Player player = new Player("Test");
-        player.addBuild(new Build(CW_Build.DOG, true));
-        player.addBuild(new Build(CW_Build.PHOON, false));
-        player.addBuild(new Build(CW_Build.SCORP, true));
+        Player finn = new Player("DragonDC_");
+        finn.addBuild(new Build(CW_Build.DOG, false));
+        finn.addBuild(new Build(CW_Build.RETCHER, false));
+        finn.addBuild(new Build(CW_Build.SCORP, false));
 
-        Player player2 = new Player("Hallo");
-        player2.addBuild(new Build(CW_Build.DOG, false));
-        player2.addBuild(new Build(CW_Build.RETCHER, true));
+        Player daniel = new Player("Daniel_St00");
+        daniel.addBuild(new Build(CW_Build.DOG, true));
+        daniel.addBuild(new Build(CW_Build.SPINNE, false));
+        daniel.addBuild(new Build(CW_Build.PHOON, false));
 
-        System.out.println(player);
-
+        // System.out.println(player);
 
         //player.removeBuild(new Build(CW_Build.SCORP, true));
 
@@ -30,22 +30,35 @@ public class Debug {
 
         //player.updateDoppler(CW_Build.DOG, false);
 
-        System.out.println(player);
+
+        //System.out.println(player);
         List<Player> players = new ArrayList<>();
-        players.add(player);
-        Clan clan = new Clan("Test", players);
-        clan.addMember(player2);
+        players.add(finn);
+        Clan jkdo = new Clan("JKDO", players);
+        jkdo.addMember(daniel);
 
-        System.out.println(clan.getAllDopplerBuilds());
+        System.out.println(jkdo);
+        System.out.println(jkdo.getAllDopplerBuilds());
 
-        System.out.println(clan);
-        System.out.println(clan.getPlayer("Test"));
-        clan.getAllDopplerBuilds();
+        System.out.println(jkdo);
+        System.out.println(jkdo.getPlayer("DragonDC_"));
+        jkdo.addBuildCombination(List.of(Category.RANGE, Category.PORC, Category.RANGE, Category.MELEE), Rating.SEHR_GUT);
+        System.out.println(jkdo.getBuildCombinations());
+        jkdo.changeRatingBuildCombination(List.of(Category.RANGE, Category.PORC, Category.RANGE, Category.MELEE), Rating.GOLD);
+        System.out.println(jkdo.getBuildCombinations());
+        jkdo.addBuildCombination(List.of(Category.SPINNE, Category.RANGE, Category.PORC, Category.MELEE), Rating.PAK4);
+        System.out.println(jkdo.getBuildCombinations());
+        jkdo.changeRatingBuildCombination(List.of(Category.SPINNE, Category.RANGE, Category.PORC, Category.MELEE), Rating.SCHLECHT);
+        System.out.println(jkdo.getBuildCombinations());
+        jkdo.removeBuildCombination(List.of(Category.SPINNE, Category.RANGE, Category.PORC, Category.MELEE));
+        System.out.println(jkdo.getBuildCombinations());
+        System.out.println(jkdo.addBuildCombination(List.of(Category.RANGE, Category.PORC, Category.RANGE, Category.MELEE), Rating.GUT));
+        System.out.println(jkdo.getBuildCombinations());
 
         Window window = new Window();
-        window.init(clan);
+        window.init(jkdo);
 
-        clan.saveToFile("player.ser");
+        //jkdo.saveToFile("player.ser");
     }
 
     private static Clan loadClan(String name) {
