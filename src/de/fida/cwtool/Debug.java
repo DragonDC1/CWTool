@@ -4,11 +4,21 @@ import de.fida.cwtool.Clan;
 import de.fida.cwtool.gui.Window;
 
 import java.io.*;
+import java.net.URL;
 import java.util.*;
 
 public class Debug {
     public static void main(String[] args) throws Exception {
         //Clan clan = loadClan("player.ser");
+
+        /*URL url = new URL("https://raw.githubusercontent.com/DragonDC1/CWTool/master/files/clan.txt");
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(url.openStream()));
+
+        String inputLine;
+        while ((inputLine = in.readLine()) != null)
+            System.out.println(inputLine);
+        in.close();*/
 
         Player finn = new Player("DragonDC_");
         finn.addBuild(new Build(CW_Build.DOG, false));
