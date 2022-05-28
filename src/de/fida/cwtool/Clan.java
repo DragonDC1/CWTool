@@ -1,14 +1,21 @@
 package de.fida.cwtool;
 
+import de.fida.cwtool.util.ListComperator;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.bag.CollectionSortedBag;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.sql.Array;
 import java.util.*;
 
 public class Clan implements Serializable {
-    private String name;                                // Clanname
-    private List<Player> members = new ArrayList<>();   // Liste der Mitglieder
+    private String name;                                                    // Clanname
+    private List<Player> members = new ArrayList<>();                       // Liste der Mitglieder
+    private List<BuildCombination> buildCombinations = new ArrayList<>();   // Liste aller Build-Kombinationen
+    private List<PlayerCombination> playerCombinations = new ArrayList<>(); // Liste aller Spieler-Kombinationen
 
     public Clan (String name) {
         this.name = name;
@@ -41,22 +48,114 @@ public class Clan implements Serializable {
     /*
      *  Entfernt ein Mitglied aus einem Clan
      *  Gibt true zurück, wenn erfolgreich entfernt
-     *  Gibt false zurück, der Spieler nicht entfernt werden konnte
+     *  Gibt false zurück, wenn der Spieler nicht entfernt werden konnte
      */
     public boolean removeMember(Player player) {
         return this.members.remove(player);
     }
 
+    /*
+     *  Fügt eine neue Kombination aus Builds hinzu
+     *  Gibt true zurück, wenn erfolgreich hinzugefügt
+     *  Gibt false zurück, wenn die Kombination schon vorhanden ist
+     *  oder nicht hinzugefügt werden konnte
+     */
+    public boolean addBuildCombination (List<Category> builds, Rating rating) {
+        if (this.buildCombinations.contains(new BuildCombination(builds, rating)))
+            return false;
+        else
+            return this.buildCombinations.add(new BuildCombination(builds, rating));
+    }
+
+    /*
+     *  Entfernt eine bestehende Kombination aus Builds
+     *  Gibt true zurück, wenn erfolgreich entfernt
+     *  Gibt false zurück, wenn die Kombination nicht vorhanden ist
+     *  oder nicht entfernt werden konnte
+     */
+    public boolean removeBuildCombination (List<Category> builds) {
+        for (BuildCombination b : buildCombinations) {
+            if(CollectionUtils.isEqualCollection(b.getBuilds(), builds)) {
+                return buildCombinations.remove(b);
+            }
+        }
+        return false;
+    }
+
+    /*
+     *  Ändert das Rating einer Kombination
+     *  Gibt true zurück, wenn erfolgreich geändert
+     *  Gibt false zurück, wenn die Kombination nicht vorhanden ist
+     */
+    public boolean changeRatingBuildCombination (List<Category> builds, Rating newRating) {
+        for (BuildCombination b : buildCombinations) {
+            if(CollectionUtils.isEqualCollection(b.getBuilds(), builds)) {
+                b.setRating(newRating);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /*
+     *  Fügt eine neue Spielerkombination hinzu
+     *  Gibt true zurück, wenn erfolgreich hinzugefügt
+     *  Gibt false zurück, wenn nicht alle Spieler im Clan sind,
+     *  die Kombination bereits existiert
+     *  oder nicht hinzugefügt werden konnte
+     */
+    public boolean addPlayerCombination(List<Player> player, Rating rating) {
+        // Überprüfe, ob alle player im Clan
+        for (Player p : player) {
+            if (!this.members.contains(p))
+                return false;
+        }
+
+        if (this.playerCombinations.contains(new PlayerCombination(player, rating)))
+            return false;
+        else
+            return this.playerCombinations.add(new PlayerCombination(player, rating));
+    }
+
+    /*
+     *  Entfernt eine bestehende Spielerkombination
+     *  Gibt true zurück, wenn erfolgreich entfernt
+     *  Gibt false zurück, wenn die Kombination nicht vorhanden ist
+     *  oder nicht entfernt werden konnte
+     */
+    public boolean removePlayerCombination (List<Player> players) {
+        for (PlayerCombination p : playerCombinations) {
+            if(CollectionUtils.isEqualCollection(p.getPlayer(), players)) {
+                return buildCombinations.remove(p);
+            }
+        }
+        return false;
+    }
+
+    /*
+     *  Ändert das Rating einer Spielerkombination
+     *  Gibt true zurück, wenn erfolgreich geändert
+     *  Gibt false zurück, wenn die Kombination nicht vorhanden ist
+     */
+    public boolean updateRatingPlayerCombination (List<Player> players, Rating newRating) {
+        for (PlayerCombination p : playerCombinations) {
+            if(CollectionUtils.isEqualCollection(p.getPlayer(), players)) {
+                p.setRating(newRating);
+                return true;
+            }
+        }
+        return false;
+    }
+
     public Player getPlayer(String name) {
         Player p = members.stream().filter(player -> name.equals(player.getName())).findAny().orElse(null);
-
-        if(p == null) {
-            throw new RuntimeException("Den Spieler gibts ned!");
-        }
 
         return p;
     }
 
+    /*
+     *  Gibt eine Liste aller SPieler mit all ihren Builds mit Doppler zurück
+     */
     public List<Player> getAllDopplerBuilds() {
         List<Player> dopplerBuilds = new ArrayList<>();
         for (Player p : members) {
@@ -103,5 +202,9 @@ public class Clan implements Serializable {
 
     public List<Player> getMembers() {
         return members;
+    }
+
+    public List<BuildCombination> getBuildCombinations() {
+        return buildCombinations;
     }
 }
