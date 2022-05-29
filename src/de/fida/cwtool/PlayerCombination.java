@@ -36,6 +36,11 @@ public class PlayerCombination {
             return this.players.add(player);
     }
 
+    /*
+     *  Entfernt einen Spieler aus der Kombination
+     *  Gibt true zurück, wenn erfolgreich entfernt
+     *  Gibt false zurück, wenn der Spieler nicht in der Kombination ist
+     */
     public boolean removePlayer (Player player) {
         return this.players.remove(player);
     }
@@ -61,11 +66,15 @@ public class PlayerCombination {
         return players;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public void setRating(Rating rating) {
         this.rating = rating;
     }
 
-    public String getName() {
-        return name;
+    public void setName(String name) {
+        this.name = name;
     }
 }

@@ -204,4 +204,8 @@ public class Clan implements Serializable {
     public List<BuildCombination> getBuildCombinations() {
         return buildCombinations;
     }
+
+    public List<PlayerCombination> getPlayerCombinations() {
+        return playerCombinations;
+    }
 }
