@@ -123,7 +123,7 @@ public class Clan implements Serializable {
         return this.playerCombinations.add(new PlayerCombination(name));
     }
 
-    /*
+    /*  LEGACY
      *  Entfernt eine bestehende Spielerkombination
      *  Gibt true zurück, wenn erfolgreich entfernt
      *  Gibt false zurück, wenn die Kombination nicht vorhanden ist
@@ -153,7 +153,7 @@ public class Clan implements Serializable {
         return false;
     }
 
-    /*
+    /*  LEGACY
      *  Ändert das Rating einer Spielerkombination
      *  Gibt true zurück, wenn erfolgreich geändert
      *  Gibt false zurück, wenn die Kombination nicht vorhanden ist
@@ -168,14 +168,34 @@ public class Clan implements Serializable {
         return false;
     }
 
-    public Player getPlayer(String name) {
+    /*
+     *  Ändert das Rating einer Spielerkombination
+     *  Gibt true zurück, wenn erfolgreich geändert
+     *  Gibt false zurück, wenn die Kombination nicht vorhanden ist
+     */
+    public boolean updateRatingPlayerCombination (String name, Rating newRating) {
+        for (PlayerCombination p : playerCombinations) {
+            if(p.getName().equals(name)) {
+                p.setRating(newRating);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Player getPlayer (String name) {
         Player p = members.stream().filter(player -> name.equals(player.getName())).findAny().orElse(null);
 
         return p;
     }
 
+    public PlayerCombination getPlayerCombination (String name) {
+        PlayerCombination p = playerCombinations.stream().filter(playerCombination -> name.equals(playerCombination.getName())).findAny().orElse(null);
+        return p;
+    }
+
     /*
-     *  Gibt eine Liste aller SPieler mit all ihren Builds mit Doppler zurück
+     *  Gibt eine Liste aller Spieler mit all ihren Builds mit Doppler zurück
      */
     public List<Player> getAllDopplerBuilds() {
         List<Player> dopplerBuilds = new ArrayList<>();
