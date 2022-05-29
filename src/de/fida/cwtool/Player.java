@@ -7,6 +7,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Player implements Serializable {
     @Serial
@@ -58,6 +59,19 @@ public class Player implements Serializable {
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return Objects.equals(name, player.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
+    }
+
     public String toString() {
        return name + ": " + builds.toString();
     }
@@ -70,4 +84,5 @@ public class Player implements Serializable {
     public List<Build> getBuilds() {
         return builds;
     }
+
 }

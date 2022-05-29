@@ -52,7 +52,7 @@ public class Clan implements Serializable {
         if(removed) {
             // aus allen Kombis removen
             for (PlayerCombination p : playerCombinations) {
-                if (p.getPlayers().contains(p)) {
+                if (p.getPlayers().contains(player)) {
                     p.removePlayer(player);
                 }
             }
