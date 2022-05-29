@@ -54,7 +54,7 @@ public class Clan implements Serializable {
         if(removed) {
             // aus allen Kombis removen
             for (PlayerCombination p : playerCombinations) {
-                if (p.getPlayers().contains(p)) {
+                if (p.getPlayers().contains(player)) {
                     p.removePlayer(player);
                 }
             }
@@ -276,6 +276,34 @@ public class Clan implements Serializable {
         }
 
         return dopplerBuilds;
+    }
+
+    /*
+     *  Gibt eine Liste aller Spielerkombinationen mit einem bestimmten Rating aus
+     */
+    public List<PlayerCombination> getPlayerCombinationsByRating (Rating rating) {
+        List<PlayerCombination> combinations = new ArrayList<>();
+        for (PlayerCombination p : playerCombinations) {
+            if(p.getRating().toString().equals(rating.toString())) {
+                combinations.add(p);
+            }
+        }
+
+        return combinations;
+    }
+
+    /*
+     *  Gibt eine Liste aller Buildkombinationen mit einem bestimmten Rating aus
+     */
+    public List<BuildCombination> getBuildCombinationsByRating (Rating rating) {
+        List<BuildCombination> combinations = new ArrayList<>();
+        for (BuildCombination b : buildCombinations) {
+            if(b.getRating().toString().equals(rating.toString())) {
+                combinations.add(b);
+            }
+        }
+
+        return combinations;
     }
 
     public String toString() {
