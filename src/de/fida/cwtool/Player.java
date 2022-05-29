@@ -3,11 +3,14 @@ package de.fida.cwtool;
 import de.fida.cwtool.Build;
 import de.fida.cwtool.CW_Build;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Player implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -8668653455863136766L;
     String name;                                        // Spielername
     private List<Build> builds = new ArrayList<>();     // Liste aller Builds
 

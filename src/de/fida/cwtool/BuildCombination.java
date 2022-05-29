@@ -1,9 +1,12 @@
 package de.fida.cwtool;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.*;
 
 public class BuildCombination implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 2983901898052264780L;
     List<Category> builds = new ArrayList<>();
     Rating rating;
 

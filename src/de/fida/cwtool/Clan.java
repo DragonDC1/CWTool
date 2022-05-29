@@ -2,13 +2,12 @@ package de.fida.cwtool;
 
 import org.apache.commons.collections4.CollectionUtils;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.util.*;
 
 public class Clan implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -7268115727182617157L;
     private String name;                                                    // Clanname
     private List<Player> members = new ArrayList<>();                       // Liste der Mitglieder
     private List<BuildCombination> buildCombinations = new ArrayList<>();   // Liste aller Build-Kombinationen
@@ -114,8 +113,14 @@ public class Clan implements Serializable {
             return this.playerCombinations.add(new PlayerCombination(name, player, rating));
     }
 
+    /*
+     *  Fügt eine neue, noch leere Spielerkombination hinzu
+     *  Gibt true zurück, wenn erfolgreich hinzugefüg
+     *  Gibt false zurück, wenn die Kombination bereits existiert
+     *  oder nicht hinzugefügt werden konnte
+     */
     public boolean addPlayerCombination (String name) {
-        return false;
+        return this.playerCombinations.add(new PlayerCombination(name));
     }
 
     /*
@@ -127,6 +132,21 @@ public class Clan implements Serializable {
     public boolean removePlayerCombination (List<Player> players) {
         for (PlayerCombination p : playerCombinations) {
             if(CollectionUtils.isEqualCollection(p.getPlayers(), players)) {
+                return buildCombinations.remove(p);
+            }
+        }
+        return false;
+    }
+
+    /*
+     *  Entfernt eine bestehende Spielerkombination
+     *  Gibt true zurück, wenn erfolgreich entfernt
+     *  Gibt false zurück, wenn die Kombination nicht vorhanden ist
+     *  oder nicht entfernt werden konnte
+     */
+    public boolean removePlayerCombination (String name) {
+        for (PlayerCombination p : playerCombinations) {
+            if(p.getName().equals(name)) {
                 return buildCombinations.remove(p);
             }
         }

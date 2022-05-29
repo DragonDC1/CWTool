@@ -1,9 +1,12 @@
 package de.fida.cwtool;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
 public class Build implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -8169101013045692867L;
     private CW_Build art;       // Art des Builds
     private boolean doppler;    // mit Doppler?
 

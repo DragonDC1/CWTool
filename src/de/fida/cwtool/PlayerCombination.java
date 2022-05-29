@@ -1,9 +1,12 @@
 package de.fida.cwtool;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.*;
 
 public class PlayerCombination implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 2704057640738783268L;
     String name;
     List<Player> players = new ArrayList<>();
     Rating rating;
