@@ -43,11 +43,21 @@ public class Clan implements Serializable {
 
     /*
      *  Entfernt ein Mitglied aus einem Clan
+     *  und enfernt den Spieler aus allen Kombis
      *  Gibt true zurück, wenn erfolgreich entfernt
      *  Gibt false zurück, wenn der Spieler nicht entfernt werden konnte
      */
     public boolean removeMember(Player player) {
-        return this.members.remove(player);
+        boolean removed =  this.members.remove(player);
+        if(removed) {
+            // aus allen Kombis removen
+            for (PlayerCombination p : playerCombinations) {
+                if (p.getPlayers().contains(p)) {
+                    p.removePlayer(player);
+                }
+            }
+        }
+        return removed;
     }
 
     /*

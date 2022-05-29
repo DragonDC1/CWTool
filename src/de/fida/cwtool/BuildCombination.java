@@ -27,8 +27,6 @@ public class BuildCombination implements Serializable {
         this.name = name;
     }
 
-    // FIXME: 29.05.2022 add/remove noch hinzufügen
-
     /*
      *  Fügt der Kombination einen neuen Build hinzu
      *  Gibt true zurück, wenn erfolgreich hinzugefügt
@@ -40,6 +38,15 @@ public class BuildCombination implements Serializable {
             return false;
         else
             return this.builds.add(build);
+    }
+
+    /*
+     *  Entfernt einen Build aus der Kombination
+     *  Gibt true zurück, wenn erfolgreich entfernt
+     *  Gibt false zurück, wenn der Build nicht in der Kombination ist
+     */
+    public boolean removeBuild (Category build) {
+        return this.builds.remove(build);
     }
 
     @Override
