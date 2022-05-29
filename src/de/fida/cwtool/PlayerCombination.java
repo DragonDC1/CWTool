@@ -17,12 +17,6 @@ public class PlayerCombination implements Serializable {
         this.rating = rating;
     }
 
-    // FIXME: 29.05.2022 Raus mit die Viecher
-    public PlayerCombination (List<Player> players, Rating rating) {
-        this.players = players;
-        this.rating = rating;
-    }
-
     public PlayerCombination (String name) {
         this.name = name;
     }

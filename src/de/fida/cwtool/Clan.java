@@ -56,14 +56,27 @@ public class Clan implements Serializable {
      *  Gibt false zurück, wenn die Kombination schon vorhanden ist
      *  oder nicht hinzugefügt werden konnte
      */
-    public boolean addBuildCombination (List<Category> builds, Rating rating) {
-        if (this.buildCombinations.contains(new BuildCombination(builds, rating)))
+    public boolean addBuildCombination (String name, List<Category> builds, Rating rating) {
+        if (this.buildCombinations.contains(new BuildCombination(name, builds, rating)))
             return false;
         else
-            return this.buildCombinations.add(new BuildCombination(builds, rating));
+            return this.buildCombinations.add(new BuildCombination(name, builds, rating));
     }
 
     /*
+     *  Fügt eine neue Kombination aus Builds hinzu
+     *  Gibt true zurück, wenn erfolgreich hinzugefügt
+     *  Gibt false zurück, wenn die Kombination schon vorhanden ist
+     *  oder nicht hinzugefügt werden konnte
+     */
+    public boolean addBuildCombination (String name) {
+        if (this.buildCombinations.contains(new BuildCombination(name)))
+            return false;
+        else
+            return this.buildCombinations.add(new BuildCombination(name));
+    }
+
+    /* LEGACY
      *  Entfernt eine bestehende Kombination aus Builds
      *  Gibt true zurück, wenn erfolgreich entfernt
      *  Gibt false zurück, wenn die Kombination nicht vorhanden ist
@@ -72,6 +85,21 @@ public class Clan implements Serializable {
     public boolean removeBuildCombination (List<Category> builds) {
         for (BuildCombination b : buildCombinations) {
             if(CollectionUtils.isEqualCollection(b.getBuilds(), builds)) {
+                return buildCombinations.remove(b);
+            }
+        }
+        return false;
+    }
+
+    /*
+     *  Entfernt eine bestehende Kombination aus Builds
+     *  Gibt true zurück, wenn erfolgreich entfernt
+     *  Gibt false zurück, wenn die Kombination nicht vorhanden ist
+     *  oder nicht entfernt werden konnte
+     */
+    public boolean removeBuildCombination (String name) {
+        for (BuildCombination b : buildCombinations) {
+            if(b.getName().equals(name)) {
                 return buildCombinations.remove(b);
             }
         }
@@ -107,7 +135,7 @@ public class Clan implements Serializable {
                 return false;
         }
 
-        if (this.playerCombinations.contains(new PlayerCombination(player, rating)))
+        if (this.playerCombinations.contains(new PlayerCombination(name, player, rating)))
             return false;
         else
             return this.playerCombinations.add(new PlayerCombination(name, player, rating));
@@ -132,7 +160,7 @@ public class Clan implements Serializable {
     public boolean removePlayerCombination (List<Player> players) {
         for (PlayerCombination p : playerCombinations) {
             if(CollectionUtils.isEqualCollection(p.getPlayers(), players)) {
-                return buildCombinations.remove(p);
+                return playerCombinations.remove(p);
             }
         }
         return false;
@@ -147,7 +175,7 @@ public class Clan implements Serializable {
     public boolean removePlayerCombination (String name) {
         for (PlayerCombination p : playerCombinations) {
             if(p.getName().equals(name)) {
-                return buildCombinations.remove(p);
+                return playerCombinations.remove(p);
             }
         }
         return false;
@@ -183,12 +211,18 @@ public class Clan implements Serializable {
         return false;
     }
 
+    /*
+     *  Gibt einen Spieler durch Eingabe des Namens zurück
+     */
     public Player getPlayer (String name) {
         Player p = members.stream().filter(player -> name.equals(player.getName())).findAny().orElse(null);
 
         return p;
     }
 
+    /*
+     *  Gibt eine Spielerkombination durch Eingabe des Namens zurück
+     */
     public PlayerCombination getPlayerCombination (String name) {
         PlayerCombination p = playerCombinations.stream().filter(playerCombination -> name.equals(playerCombination.getName())).findAny().orElse(null);
         return p;
