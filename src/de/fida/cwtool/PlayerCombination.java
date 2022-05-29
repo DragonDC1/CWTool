@@ -68,6 +68,10 @@ public class PlayerCombination implements Serializable {
         return name;
     }
 
+    public Rating getRating() {
+        return rating;
+    }
+
     public void setRating(Rating rating) {
         this.rating = rating;
     }
