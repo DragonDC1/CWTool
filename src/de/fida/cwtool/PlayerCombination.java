@@ -1,8 +1,9 @@
 package de.fida.cwtool;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class PlayerCombination {
+public class PlayerCombination implements Serializable {
     String name;
     List<Player> players = new ArrayList<>();
     Rating rating;
@@ -50,12 +51,12 @@ public class PlayerCombination {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PlayerCombination that = (PlayerCombination) o;
-        return Objects.equals(players, that.players);
+        return Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(players);
+        return Objects.hash(name);
     }
 
     public String toString () {

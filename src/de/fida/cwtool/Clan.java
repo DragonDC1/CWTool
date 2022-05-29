@@ -101,7 +101,7 @@ public class Clan implements Serializable {
      *  die Kombination bereits existiert
      *  oder nicht hinzugefügt werden konnte
      */
-    public boolean addPlayerCombination(List<Player> player, Rating rating) {
+    public boolean addPlayerCombination (String name, List<Player> player, Rating rating) {
         // Überprüfe, ob alle player im Clan
         for (Player p : player) {
             if (!this.members.contains(p))
@@ -111,7 +111,11 @@ public class Clan implements Serializable {
         if (this.playerCombinations.contains(new PlayerCombination(player, rating)))
             return false;
         else
-            return this.playerCombinations.add(new PlayerCombination(player, rating));
+            return this.playerCombinations.add(new PlayerCombination(name, player, rating));
+    }
+
+    public boolean addPlayerCombination (String name) {
+        return false;
     }
 
     /*
