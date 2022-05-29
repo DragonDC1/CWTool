@@ -13,6 +13,8 @@ public class Clan implements Serializable {
     private List<BuildCombination> buildCombinations = new ArrayList<>();   // Liste aller Build-Kombinationen
     private List<PlayerCombination> playerCombinations = new ArrayList<>(); // Liste aller Spieler-Kombinationen
 
+
+
     public Clan (String name) {
         this.name = name;
     }

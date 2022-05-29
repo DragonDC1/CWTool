@@ -9,7 +9,7 @@ import java.util.*;
 
 public class Debug {
     public static void main(String[] args) throws Exception {
-        // Clan jkdo = loadClan("clan.txt");
+         Clan jkdo = loadClan("clan.txt");
 
         /*URL url = new URL("https://raw.githubusercontent.com/DragonDC1/CWTool/master/files/clan.txt");
         BufferedReader in = new BufferedReader(
@@ -20,7 +20,7 @@ public class Debug {
             System.out.println(inputLine);
         in.close();*/
 
-        Player finn = new Player("DragonDC_");
+        /*Player finn = new Player("DragonDC_");
         finn.addBuild(new Build(CW_Build.DOG, false));
         finn.addBuild(new Build(CW_Build.RETCHER, false));
         finn.addBuild(new Build(CW_Build.SCORP, false));
@@ -54,23 +54,20 @@ public class Debug {
 
         //System.out.println(player);
         List<Player> players = new ArrayList<>();
-        players.add(finn);
-        Clan jkdo = new Clan("JKDO", players);
-        jkdo.addMember(daniel);
-        jkdo.addMember(saft);
-        jkdo.addMember(kaiser);
+        players.add(finn);*/
+        //Clan jkdo = new Clan("JKDO");
 
         System.out.println(jkdo);
         System.out.println(jkdo.getAllDopplerBuilds());
 
         System.out.println(jkdo);
         System.out.println(jkdo.getPlayer("DragonDC_"));
-        jkdo.addPlayerCombination("Standard");
+        /*jkdo.addPlayerCombination("Standard");
         jkdo.getPlayerCombination("Standard").addPlayer(finn);
         jkdo.getPlayerCombination("Standard").addPlayer(daniel);
         jkdo.getPlayerCombination("Standard").addPlayer(saft);
         jkdo.getPlayerCombination("Standard").addPlayer(kaiser);
-        System.out.println(jkdo.getPlayerCombination("Standard"));
+        System.out.println(jkdo.getPlayerCombination("Standard"));*/
         /*jkdo.addBuildCombination(List.of(Category.RANGE, Category.PORC, Category.RANGE, Category.MELEE), Rating.SEHR_GUT);
         System.out.println(jkdo.getBuildCombinations());
         jkdo.changeRatingBuildCombination(List.of(Category.RANGE, Category.PORC, Category.RANGE, Category.MELEE), Rating.GOLD);

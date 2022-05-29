@@ -1,8 +1,6 @@
 package de.fida.cwtool.util;
 
-import de.fida.cwtool.CW_Build;
-import de.fida.cwtool.Clan;
-import de.fida.cwtool.Player;
+import de.fida.cwtool.*;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -55,13 +53,46 @@ public class CompCreator {
 
     public static JComboBox<String> createPlayerSelection(Clan clan, int x, int y) {
         JComboBox<String> box = new JComboBox<>();
-        box.setBounds(x, y, 100, 20);
+        box.setBounds(x, y, 118, 20);
 
         box.addItem("");
 
         for(Player p : clan.getMembers()) {
             box.addItem(p.getName());
         }
+
+        return box;
+    }
+
+    public static JComboBox<String> createTeamSelection(Clan clan, int x, int y) {
+        JComboBox<String> box = new JComboBox<>();
+        box.setBounds(x, y, 118, 20);
+
+        box.addItem("");
+
+        for(PlayerCombination combination : clan.getPlayerCombinations()) {
+            box.addItem(combination.getName());
+        }
+
+        return box;
+    }
+
+    public static JComboBox<String> createRatingSelection(int x, int y) {
+        JComboBox<String> box = new JComboBox<>();
+        box.setBounds(x, y, 118, 20);
+
+        //box.addItem("");
+
+        for(Rating rating : Rating.values()) {
+            box.addItem(rating.toString());
+        }
+
+        return box;
+    }
+
+    public static JComboBox<String> createBox(int x, int y) {
+        JComboBox<String> box = new JComboBox<>();
+        box.setBounds(x, y, 118, 20);
 
         return box;
     }
