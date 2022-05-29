@@ -9,7 +9,8 @@ import java.io.File;
 
 public class IMGLoader {
 
-    public static final int SIZE = 45;
+    //public static final int SIZE = 45;
+    public static final int SIZE = 65;
 
     public static BufferedImage loadImage(CW_Build build) {
         try {

@@ -50,6 +50,8 @@ public class Window {
     public final String UNCHECKED = "☐";
     public final String CHECKED = "☑";
 
+    private final int ROW_SIZE = 50;
+
     private final Color EDIT_ACTIVE = new Color(0x216421);
     private final Color EDIT_INACTIVE = new Color(0x963032);
 
@@ -111,7 +113,7 @@ public class Window {
 
         JTree tree = new JTree(root);
         tree.setCellRenderer(new ImageTreeCellRenderer(this));
-        tree.setRowHeight(30);
+        tree.setRowHeight(ROW_SIZE);
 
         paneScroll = new JScrollPane(tree);
         paneScroll.setBorder(null);
@@ -151,6 +153,16 @@ public class Window {
                                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) selPath.getLastPathComponent();
                                 node.setUserObject(UNCHECKED + " Doppler");
 
+                                Player player = clan.getPlayer(boxPlayer.getSelectedItem().toString());
+
+                                if(player != null) {
+                                    for(CW_Build build : CW_Build.values()) {
+                                        if(build.toString().equals(node.getParent().toString())) {
+                                            player.updateDoppler(build, false);
+                                        }
+                                    }
+                                }
+
                                 DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
                                 model.reload();
 
@@ -161,6 +173,16 @@ public class Window {
                             } else {
                                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) selPath.getLastPathComponent();
                                 node.setUserObject(CHECKED + " Doppler");
+
+                                Player player = clan.getPlayer(boxPlayer.getSelectedItem().toString());
+
+                                if(player != null) {
+                                    for(CW_Build build : CW_Build.values()) {
+                                        if(build.toString().equals(node.getParent().toString())) {
+                                            player.updateDoppler(build, true);
+                                        }
+                                    }
+                                }
 
                                 DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
                                 model.reload();
@@ -186,22 +208,29 @@ public class Window {
             DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
             model.reload();
 
-            // Add builds
-            Player player = clan.getPlayer(boxPlayer.getSelectedItem().toString());
-            for (Build build : player.getBuilds()) {
-                DefaultMutableTreeNode node = new DefaultMutableTreeNode(build.getArt());
+            if(!boxPlayer.getSelectedItem().toString().isEmpty()) {
+                // Add builds
+                Player player = clan.getPlayer(boxPlayer.getSelectedItem().toString());
+                if (player != null) {
+                    for (Build build : player.getBuilds()) {
+                        DefaultMutableTreeNode node = new DefaultMutableTreeNode(build.getArt());
 
-                if (build.isDoppler()) {
-                    DefaultMutableTreeNode doppler = new DefaultMutableTreeNode(CHECKED + " Doppler");
-                    node.add(doppler);
+                        DefaultMutableTreeNode doppler;
+                        if (build.isDoppler()) {
+                            doppler = new DefaultMutableTreeNode(CHECKED + " Doppler");
+                        } else {
+                            doppler = new DefaultMutableTreeNode(UNCHECKED + " Doppler");
+                        }
+                        node.add(doppler);
+
+                        root.add(node);
+                    }
                 }
 
-                root.add(node);
-            }
-
-            // Expand all rows
-            for (int i = 0; i < tree.getRowCount(); i++) {
-                tree.expandRow(i);
+                // Expand all rows
+                for (int i = 0; i < tree.getRowCount(); i++) {
+                    tree.expandRow(i);
+                }
             }
 
             tree.repaint();
@@ -324,6 +353,8 @@ class ImageTreeCellRenderer implements TreeCellRenderer {
 
                 label.setFont(label.getFont().deriveFont(16f));
             }
+        } else {
+            label.setText("");
         }
 
         label.setSize(200, tree.getRowHeight());

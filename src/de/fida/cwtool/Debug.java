@@ -9,7 +9,7 @@ import java.util.*;
 
 public class Debug {
     public static void main(String[] args) throws Exception {
-        //Clan clan = loadClan("player.ser");
+        Clan jkdo = loadClan("clan.txt");
 
         /*URL url = new URL("https://raw.githubusercontent.com/DragonDC1/CWTool/master/files/clan.txt");
         BufferedReader in = new BufferedReader(
@@ -20,7 +20,7 @@ public class Debug {
             System.out.println(inputLine);
         in.close();*/
 
-        Player finn = new Player("DragonDC_");
+        /*Player finn = new Player("DragonDC_");
         finn.addBuild(new Build(CW_Build.DOG, false));
         finn.addBuild(new Build(CW_Build.RETCHER, false));
         finn.addBuild(new Build(CW_Build.SCORP, false));
@@ -45,7 +45,7 @@ public class Debug {
         List<Player> players = new ArrayList<>();
         players.add(finn);
         Clan jkdo = new Clan("JKDO", players);
-        jkdo.addMember(daniel);
+        jkdo.addMember(daniel);*/
 
         System.out.println(jkdo);
         System.out.println(jkdo.getAllDopplerBuilds());
