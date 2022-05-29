@@ -36,6 +36,10 @@ public class PlayerCombination {
             return this.players.add(player);
     }
 
+    public boolean removePlayer (Player player) {
+        return this.players.remove(player);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
