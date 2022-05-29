@@ -29,6 +29,19 @@ public class BuildCombination implements Serializable {
 
     // FIXME: 29.05.2022 add/remove noch hinzufügen
 
+    /*
+     *  Fügt der Kombination einen neuen Build hinzu
+     *  Gibt true zurück, wenn erfolgreich hinzugefügt
+     *  Gibt false zurück, wenn der Build schon in der Kombination ist
+     *  oder nicht hinzugefügt werden konnte
+     */
+    public boolean addBuild (Category build) {
+        if (this.builds.contains(build))
+            return false;
+        else
+            return this.builds.add(build);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
