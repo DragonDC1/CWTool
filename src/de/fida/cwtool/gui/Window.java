@@ -6,6 +6,7 @@ import de.fida.cwtool.util.IMGLoader;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+import javax.swing.text.WrappedPlainView;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeCellRenderer;
@@ -15,6 +16,7 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
+import java.util.Timer;
 
 public class Window {
 
@@ -66,6 +68,7 @@ public class Window {
     private final JComboBox[] MEMBERS_BOX = new JComboBox[MAX_PLAYER_SIZE];
     private final String[] SAVED_PLAYER = new String[MAX_PLAYER_SIZE];
 
+    private boolean refreshPlayer;
     private boolean refreshTeams;
 
     private JPanel panelPlayerSelection;
@@ -79,11 +82,14 @@ public class Window {
     private final HashMap<String, Boolean> STATES = new HashMap<>();
 
     private final List<Player> AVAILABLE_PLAYER = new ArrayList<>();
+    private final List<String> TEST = new ArrayList<>();
 
     private static PlayerCombination currentPlayerCombination;
 
     public void init(Clan clan) throws Exception {
         this.clan = clan;
+
+        clan.getMembers().sort(comparePlayer);
 
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
@@ -182,15 +188,19 @@ public class Window {
                 buttonEditMode.setText("Bearbeitung deaktivieren");
                 buttonEditMode.setForeground(EDIT_ACTIVE);
 
-                buttonAddBuild.setEnabled(true);
-                buttonRemovePlayer.setEnabled(true);
+                if (!boxPlayer.getSelectedItem().toString().isEmpty()) {
+                    buttonAddBuild.setEnabled(true);
+                    buttonRemovePlayer.setEnabled(true);
+                }
             } else if (buttonEditMode.getText().equals("Bearbeitung deaktivieren")) {
                 editMode = false;
                 buttonEditMode.setForeground(EDIT_INACTIVE);
                 buttonEditMode.setText("Bearbeitung aktivieren");
 
-                buttonAddBuild.setEnabled(false);
-                buttonRemovePlayer.setEnabled(false);
+                if (!boxPlayer.getSelectedItem().toString().isEmpty()) {
+                    buttonAddBuild.setEnabled(false);
+                    buttonRemovePlayer.setEnabled(false);
+                }
             }
         });
 
@@ -223,7 +233,18 @@ public class Window {
             button.setBounds(30, 75, 125, 25);
 
             button.addActionListener(e1 -> {
+                // FIXME: 29.05.2022
+                Player player = clan.getPlayer(boxPlayer.getSelectedItem().toString());
 
+                if (player != null) {
+                    for (CW_Build build : CW_Build.values()) {
+                        if (build.toString().equals(boxBuilds.getSelectedItem().toString())) {
+                            player.addBuild(new Build(build, boxDoppler.isSelected()));
+                        }
+                    }
+
+                    updateTree(tree, root);
+                }
             });
 
             button.setVisible(true);
@@ -301,37 +322,17 @@ public class Window {
             // Change name of root
             root.setUserObject(boxPlayer.getSelectedItem());
 
-            // Remove all builds
-            root.removeAllChildren();
-            DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
-            model.reload();
+            updateTree(tree, root);
 
-            if (!boxPlayer.getSelectedItem().toString().isEmpty()) {
-                // Add builds
-                Player player = clan.getPlayer(boxPlayer.getSelectedItem().toString());
-                if (player != null) {
-                    for (Build build : player.getBuilds()) {
-                        DefaultMutableTreeNode node = new DefaultMutableTreeNode(build.getArt());
-
-                        DefaultMutableTreeNode doppler;
-                        if (build.isDoppler()) {
-                            doppler = new DefaultMutableTreeNode(CHECKED + " Doppler");
-                        } else {
-                            doppler = new DefaultMutableTreeNode(UNCHECKED + " Doppler");
-                        }
-                        node.add(doppler);
-
-                        root.add(node);
-                    }
-                }
-
-                // Expand all rows
-                for (int i = 0; i < tree.getRowCount(); i++) {
-                    tree.expandRow(i);
+            if (editMode) {
+                if (boxPlayer.getSelectedItem().toString().isEmpty()) {
+                    buttonAddBuild.setEnabled(false);
+                    buttonRemovePlayer.setEnabled(false);
+                } else {
+                    buttonAddBuild.setEnabled(true);
+                    buttonRemovePlayer.setEnabled(true);
                 }
             }
-
-            tree.repaint();
         });
 
         // Tab 2
@@ -521,14 +522,14 @@ public class Window {
             member.addItem("");
 
             for (Player player : AVAILABLE_PLAYER) {
-                //member.addItem(player.getName());
+                member.addItem(player.getName());
             }
 
             member.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
 
-                    if (member.getSelectedItem() != null) {
+                    /*if (member.getSelectedItem() != null) {
                         if (member.getSelectedItem().toString().isEmpty()) {
                             member.removeAllItems();
 
@@ -543,14 +544,14 @@ public class Window {
                                 }
                             }
                         }
-                    }
+                    }*/
 
 
                     super.mousePressed(e);
                 }
             });
 
-            member.addItemListener(e -> {
+            /*member.addItemListener(e -> {
                 if (Window.currentPlayerCombination != null) {
                     if (member.getSelectedItem() != null) {
                         if (!member.getSelectedItem().toString().isEmpty()) {
@@ -558,96 +559,120 @@ public class Window {
                         }
                     }
                 }
+            });*/
+
+            int finalI = i;
+
+            member.addItemListener(e -> {
+                if (Window.currentPlayerCombination != null) {
+                    if (member.getSelectedItem() != null && !refreshPlayer) {
+//
+                        if (!member.getSelectedItem().toString().isEmpty()) {
+                            AVAILABLE_PLAYER.remove(clan.getPlayer(member.getSelectedItem().toString()));
+//
+                            SAVED_PLAYER[finalI] = member.getSelectedItem().toString();
+//
+                            for (JComboBox box : MEMBERS_BOX) {
+                                if (box != member) {
+                                    // Other boxes
+//
+                                    //box.removeAllItems();
+//
+                                    //box.addItem("");
+//
+                                    //for (Player player : AVAILABLE_PLAYER) {
+                                    //box.addItem(player.getName());
+                                    //}
+//
+                                    box.removeItem(member.getSelectedItem().toString());
+                                } else {
+                                    // Own box
+//
+                                }
+                            }
+                        } else {
+                            // Reset player
+                            for (JComboBox box : MEMBERS_BOX) {
+                                if (box != member) {
+                                    // Other boxes
+//
+                                    //box.removeAllItems();
+//
+                                    //box.addItem("");
+//
+                                    //for (Player player : AVAILABLE_PLAYER) {
+                                    //box.addItem(player.getName());
+                                    //}
+//
+                                    refreshPlayer = true;
+//
+                                    if (SAVED_PLAYER[finalI] != null) {
+                                        if (!SAVED_PLAYER[finalI].isEmpty()) {
+                                            box.addItem(SAVED_PLAYER[finalI]);
+                                        }
+                                    }
+
+                                    Timer t = new Timer();
+                                    t.schedule(new TimerTask() {
+                                        @Override
+                                        public void run() {
+                                            refreshPlayer = false;
+                                        }
+                                    }, 100);
+                                } else {
+                                    // Own box
+
+                                    refreshPlayer = true;
+//
+                                    if (SAVED_PLAYER[finalI] != null) {
+                                        if (!SAVED_PLAYER[finalI].isEmpty()) {
+                                            //box.addItem(SAVED_PLAYER[finalI]);
+                                        }
+                                    }
+
+                                    Timer t = new Timer();
+                                    t.schedule(new TimerTask() {
+                                        @Override
+                                        public void run() {
+                                            refreshPlayer = false;
+                                        }
+                                    }, 100);
+                                }
+                            }
+                        }
+//
+                        //System.out.println("Füge " + clan.getPlayer(member.getSelectedItem().toString()) + " dem Team " + Window.currentPlayerCombination.getName() + " hinzu");
+                        //Window.currentPlayerCombination.addPlayer(clan.getPlayer(member.getSelectedItem().toString()));
+//
+                        /*Player player = clan.getPlayer(member.getSelectedItem().toString());
+//
+                        if(player == null) {
+                            for(Player pl : clan.getMembers()) {
+                                if(!AVAILABLE_PLAYER.contains(pl)) {
+                                    System.out.println("Füge " + pl.getName() + " wieder hinzu");
+                                    AVAILABLE_PLAYER.add(pl);
+                                }
+                            }
+                        }
+//
+                        System.out.println("Entferne " + clan.getPlayer(member.getSelectedItem().toString()) + " aus Liste");
+                        AVAILABLE_PLAYER.remove(clan.getPlayer(member.getSelectedItem().toString()));
+//
+                        for(Player p : AVAILABLE_PLAYER) {
+                            System.out.println("NOCH ÜBRIG: " + p.getName());
+                        }
+//
+                        member.removeAllItems();
+//
+                        try {
+                            for (Player pla : AVAILABLE_PLAYER) {
+                                member.addItem(pla.getName());
+                            }
+                        } catch (Exception ignored) {
+                        }*/
+                    }
+                }
             });
-
-            //int finalI = i;
-
-            //member.addItemListener(e -> {
-            //    if (Window.currentPlayerCombination != null) {
-            //        if (member.getSelectedItem() != null) {
-//
-            //            if(!member.getSelectedItem().toString().isEmpty()) {
-            //                AVAILABLE_PLAYER.remove(clan.getPlayer(member.getSelectedItem().toString()));
-//
-            //                SAVED_PLAYER[finalI] = member.getSelectedItem().toString();
-//
-            //                for (JComboBox box : MEMBERS_BOX) {
-            //                    if (box != member) {
-            //                        // Other boxes
-//
-            //                        //box.removeAllItems();
-//
-            //                        //box.addItem("");
-//
-            //                        //for (Player player : AVAILABLE_PLAYER) {
-            //                        //box.addItem(player.getName());
-            //                        //}
-//
-            //                        box.removeItem(member.getSelectedItem().toString());
-            //                    } else {
-            //                        // Own box
-//
-            //                    }
-            //                }
-            //            } else {
-            //                // Reset player
-            //                for (JComboBox box : MEMBERS_BOX) {
-            //                    if (box != member) {
-            //                        // Other boxes
-//
-            //                        //box.removeAllItems();
-//
-            //                        //box.addItem("");
-//
-            //                        //for (Player player : AVAILABLE_PLAYER) {
-            //                        //box.addItem(player.getName());
-            //                        //}
-//
-            //                        if(SAVED_PLAYER[finalI] != null) {
-            //                            if(!SAVED_PLAYER[finalI].isEmpty()) {
-            //                                box.addItem(SAVED_PLAYER[finalI]);
-            //                            }
-            //                        }
-            //                    } else {
-            //                        // Own box
-//
-//
-            //                    }
-            //                }
-            //            }
-//
-            //            //System.out.println("Füge " + clan.getPlayer(member.getSelectedItem().toString()) + " dem Team " + Window.currentPlayerCombination.getName() + " hinzu");
-            //            //Window.currentPlayerCombination.addPlayer(clan.getPlayer(member.getSelectedItem().toString()));
-//
-            //            /*Player player = clan.getPlayer(member.getSelectedItem().toString());
-//
-            //            if(player == null) {
-            //                for(Player pl : clan.getMembers()) {
-            //                    if(!AVAILABLE_PLAYER.contains(pl)) {
-            //                        System.out.println("Füge " + pl.getName() + " wieder hinzu");
-            //                        AVAILABLE_PLAYER.add(pl);
-            //                    }
-            //                }
-            //            }
-//
-            //            System.out.println("Entferne " + clan.getPlayer(member.getSelectedItem().toString()) + " aus Liste");
-            //            AVAILABLE_PLAYER.remove(clan.getPlayer(member.getSelectedItem().toString()));
-//
-            //            for(Player p : AVAILABLE_PLAYER) {
-            //                System.out.println("NOCH ÜBRIG: " + p.getName());
-            //            }
-//
-            //            member.removeAllItems();
-//
-            //            try {
-            //                for (Player pla : AVAILABLE_PLAYER) {
-            //                    member.addItem(pla.getName());
-            //                }
-            //            } catch (Exception ignored) {
-            //            }*/
-            //        }
-            //    }
-            //});
 
             panelPlayerSelection.add(label);
             panelPlayerSelection.add(member);
@@ -690,6 +715,40 @@ public class Window {
         });
     }
 
+    private void updateTree(JTree tree, DefaultMutableTreeNode root) {
+        // Remove all builds
+        root.removeAllChildren();
+        DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
+        model.reload();
+
+        if (!boxPlayer.getSelectedItem().toString().isEmpty()) {
+            // Add builds
+            Player player = clan.getPlayer(boxPlayer.getSelectedItem().toString());
+            if (player != null) {
+                for (Build build : player.getBuilds()) {
+                    DefaultMutableTreeNode node = new DefaultMutableTreeNode(build.getArt());
+
+                    DefaultMutableTreeNode doppler;
+                    if (build.isDoppler()) {
+                        doppler = new DefaultMutableTreeNode(CHECKED + " Doppler");
+                    } else {
+                        doppler = new DefaultMutableTreeNode(UNCHECKED + " Doppler");
+                    }
+                    node.add(doppler);
+
+                    root.add(node);
+                }
+            }
+
+            // Expand all rows
+            for (int i = 0; i < tree.getRowCount(); i++) {
+                tree.expandRow(i);
+            }
+        }
+
+        tree.repaint();
+    }
+
     private void loadImages() {
         for (CW_Build build : CW_Build.values()) {
             BufferedImage image = IMGLoader.loadImage(build);
@@ -720,6 +779,8 @@ public class Window {
     public boolean isChecked(String name) {
         return name.contains(CHECKED);
     }
+
+    public static Comparator<Player> comparePlayer = Comparator.comparing(Player::getName);
 }
 
 class ImageTreeCellRenderer implements TreeCellRenderer {
