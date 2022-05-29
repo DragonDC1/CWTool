@@ -1,14 +1,11 @@
 package de.fida.cwtool;
 
-import de.fida.cwtool.util.ListComperator;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.bag.CollectionSortedBag;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.sql.Array;
 import java.util.*;
 
 public class Clan implements Serializable {
@@ -125,7 +122,7 @@ public class Clan implements Serializable {
      */
     public boolean removePlayerCombination (List<Player> players) {
         for (PlayerCombination p : playerCombinations) {
-            if(CollectionUtils.isEqualCollection(p.getPlayer(), players)) {
+            if(CollectionUtils.isEqualCollection(p.getPlayers(), players)) {
                 return buildCombinations.remove(p);
             }
         }
@@ -139,7 +136,7 @@ public class Clan implements Serializable {
      */
     public boolean updateRatingPlayerCombination (List<Player> players, Rating newRating) {
         for (PlayerCombination p : playerCombinations) {
-            if(CollectionUtils.isEqualCollection(p.getPlayer(), players)) {
+            if(CollectionUtils.isEqualCollection(p.getPlayers(), players)) {
                 p.setRating(newRating);
                 return true;
             }

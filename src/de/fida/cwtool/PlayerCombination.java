@@ -3,12 +3,37 @@ package de.fida.cwtool;
 import java.util.*;
 
 public class PlayerCombination {
-    List<Player> player = new ArrayList<>();
+    String name;
+    List<Player> players = new ArrayList<>();
     Rating rating;
 
-    public PlayerCombination (List<Player> player, Rating rating) {
-        this.player = player;
+    public PlayerCombination (String name, List<Player> players, Rating rating) {
+        this.name = name;
+        this.players = players;
         this.rating = rating;
+    }
+
+    // FIXME: 29.05.2022 Raus mit die Viecher
+    public PlayerCombination (List<Player> players, Rating rating) {
+        this.players = players;
+        this.rating = rating;
+    }
+
+    public PlayerCombination (String name) {
+        this.name = name;
+    }
+
+    /*
+     *  Fügt der Kombination einen neuen Spieler hinzu
+     *  Gibt true zurück, wenn erfolgreich hinzugefügt
+     *  Gibt false zurück, wenn der Spieler schon in der Kombination ist
+     *  oder nicht hinzugefügt werden konnte
+     */
+    public boolean addPlayer (Player player) {
+        if (this.players.contains(player))
+            return false;
+        else
+            return this.players.add(player);
     }
 
     @Override
@@ -16,23 +41,27 @@ public class PlayerCombination {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PlayerCombination that = (PlayerCombination) o;
-        return Objects.equals(player, that.player);
+        return Objects.equals(players, that.players);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(player);
+        return Objects.hash(players);
     }
 
     public String toString () {
-        return player.toString() + rating;
+        return players.toString() + rating;
     }
 
-    public List<Player> getPlayer() {
-        return player;
+    public List<Player> getPlayers() {
+        return players;
     }
 
     public void setRating(Rating rating) {
         this.rating = rating;
+    }
+
+    public String getName() {
+        return name;
     }
 }
