@@ -106,7 +106,7 @@ public class Clan implements Serializable {
         return false;
     }
 
-    /*
+    /*  LEGACY
      *  Ändert das Rating einer Kombination
      *  Gibt true zurück, wenn erfolgreich geändert
      *  Gibt false zurück, wenn die Kombination nicht vorhanden ist
@@ -114,6 +114,21 @@ public class Clan implements Serializable {
     public boolean changeRatingBuildCombination (List<Category> builds, Rating newRating) {
         for (BuildCombination b : buildCombinations) {
             if(CollectionUtils.isEqualCollection(b.getBuilds(), builds)) {
+                b.setRating(newRating);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /*
+     *  Ändert das Rating einer Kombination
+     *  Gibt true zurück, wenn erfolgreich geändert
+     *  Gibt false zurück, wenn die Kombination nicht vorhanden ist
+     */
+    public boolean changeRatingBuildCombination (String name, Rating newRating) {
+        for (BuildCombination b : buildCombinations) {
+            if(b.getName().equals(name)) {
                 b.setRating(newRating);
                 return true;
             }
