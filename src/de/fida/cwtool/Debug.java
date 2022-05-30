@@ -9,7 +9,7 @@ import java.util.*;
 
 public class Debug {
     public static void main(String[] args) throws Exception {
-         Clan jkdo = loadClan("clan.txt");
+        Clan jkdo = loadClan("clan.txt");
 
         /*URL url = new URL("https://raw.githubusercontent.com/DragonDC1/CWTool/master/files/clan.txt");
         BufferedReader in = new BufferedReader(

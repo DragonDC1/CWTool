@@ -80,13 +80,27 @@ public enum CW_Build implements Serializable {
         public List<Category> getCategory() {
             List<Category> categories = new ArrayList<>();
 
-            categories.add(Category.RANGE);
+            categories.add(Category.MID_RANGE);
 
             return categories;
         }
 
         public String toString() {
             return "Retcher";
+        }
+    },
+    HELIOS {
+        @Override
+        public List<Category> getCategory() {
+            List<Category> categories = new ArrayList<>();
+
+            categories.add(Category.MID_RANGE);
+
+            return categories;
+        }
+
+        public String toString() {
+            return "Helios";
         }
     };
 

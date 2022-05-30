@@ -8,16 +8,18 @@ public class PlayerCombination implements Serializable {
     @Serial
     private static final long serialVersionUID = 2704057640738783268L;
     String name;
-    List<Player> players = new ArrayList<>();
+    List<Player> listPlayers = new ArrayList<>();
     Rating rating;
 
-    public PlayerCombination (String name, List<Player> players, Rating rating) {
+    private Player[] players = new Player[4];
+
+    public PlayerCombination(String name, List<Player> players, Rating rating) {
         this.name = name;
-        this.players = players;
+        this.listPlayers = players;
         this.rating = rating;
     }
 
-    public PlayerCombination (String name) {
+    public PlayerCombination(String name) {
         this.name = name;
     }
 
@@ -27,11 +29,9 @@ public class PlayerCombination implements Serializable {
      *  Gibt false zurück, wenn der Spieler schon in der Kombination ist
      *  oder nicht hinzugefügt werden konnte
      */
-    public boolean addPlayer (Player player) {
-        if (this.players.contains(player))
-            return false;
-        else
-            return this.players.add(player);
+    public boolean addPlayer(Player player) {
+        if (this.listPlayers.contains(player)) return false;
+        else return this.listPlayers.add(player);
     }
 
     /*
@@ -39,8 +39,8 @@ public class PlayerCombination implements Serializable {
      *  Gibt true zurück, wenn erfolgreich entfernt
      *  Gibt false zurück, wenn der Spieler nicht in der Kombination ist
      */
-    public boolean removePlayer (Player player) {
-        return this.players.remove(player);
+    public boolean removePlayer(Player player) {
+        return this.listPlayers.remove(player);
     }
 
     @Override
@@ -56,12 +56,12 @@ public class PlayerCombination implements Serializable {
         return Objects.hash(name);
     }
 
-    public String toString () {
-        return players.toString() + rating;
+    public String toString() {
+        return listPlayers.toString() + rating;
     }
 
-    public List<Player> getPlayers() {
-        return players;
+    public List<Player> getListPlayers() {
+        return listPlayers;
     }
 
     public String getName() {
@@ -78,5 +78,13 @@ public class PlayerCombination implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setPlayer(int index, Player player) {
+        players[index] = player;
+    }
+
+    public Player[] getPlayers() {
+        return players;
     }
 }

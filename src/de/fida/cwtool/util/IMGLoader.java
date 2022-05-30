@@ -14,7 +14,8 @@ public class IMGLoader {
 
     public static BufferedImage loadImage(CW_Build build) {
         try {
-            BufferedImage image = ImageIO.read(new File("images/" + build + ".png"));
+            //BufferedImage image = ImageIO.read(new File("images/" + build + ".png"));
+            BufferedImage image = ImageIO.read(IMGLoader.class.getResource("/" + build + ".png"));
 
             BufferedImage output = new BufferedImage(SIZE, SIZE, BufferedImage.TYPE_INT_ARGB);
             output.getGraphics().drawImage(image, 0, 0, SIZE, SIZE, null);

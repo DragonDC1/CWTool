@@ -1,5 +1,6 @@
 package de.fida.cwtool;
 
+import de.fida.cwtool.gui.Window;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.io.*;
@@ -12,7 +13,6 @@ public class Clan implements Serializable {
     private List<Player> members = new ArrayList<>();                       // Liste der Mitglieder
     private List<BuildCombination> buildCombinations = new ArrayList<>();   // Liste aller Build-Kombinationen
     private List<PlayerCombination> playerCombinations = new ArrayList<>(); // Liste aller Spieler-Kombinationen
-
 
 
     public Clan (String name) {
@@ -54,7 +54,7 @@ public class Clan implements Serializable {
         if(removed) {
             // aus allen Kombis removen
             for (PlayerCombination p : playerCombinations) {
-                if (p.getPlayers().contains(player)) {
+                if (p.getListPlayers().contains(player)) {
                     p.removePlayer(player);
                 }
             }
@@ -186,7 +186,7 @@ public class Clan implements Serializable {
      */
     public boolean removePlayerCombination (List<Player> players) {
         for (PlayerCombination p : playerCombinations) {
-            if(CollectionUtils.isEqualCollection(p.getPlayers(), players)) {
+            if(CollectionUtils.isEqualCollection(p.getListPlayers(), players)) {
                 return playerCombinations.remove(p);
             }
         }
@@ -215,7 +215,7 @@ public class Clan implements Serializable {
      */
     public boolean updateRatingPlayerCombination (List<Player> players, Rating newRating) {
         for (PlayerCombination p : playerCombinations) {
-            if(CollectionUtils.isEqualCollection(p.getPlayers(), players)) {
+            if(CollectionUtils.isEqualCollection(p.getListPlayers(), players)) {
                 p.setRating(newRating);
                 return true;
             }

@@ -52,7 +52,7 @@ public class CompCreator {
     }
 
     public static JComboBox<String> createPlayerSelection(Clan clan, int x, int y) {
-        JComboBox<String> box = new JComboBox<>();
+        JComboBox<String> box = new JComboBox<>(new SortedComboBoxModel<>());
         box.setBounds(x, y, 118, 20);
 
         box.addItem("");
@@ -65,7 +65,7 @@ public class CompCreator {
     }
 
     public static JComboBox<String> createTeamSelection(Clan clan, int x, int y) {
-        JComboBox<String> box = new JComboBox<>();
+        JComboBox<String> box = new JComboBox<>(new SortedComboBoxModel<>());
         box.setBounds(x, y, 118, 20);
 
         box.addItem("");
@@ -90,8 +90,8 @@ public class CompCreator {
         return box;
     }
 
-    public static JComboBox<String> createBox(int x, int y) {
-        JComboBox<String> box = new JComboBox<>();
+    public static JComboBox<String> createBox(SortedComboBoxModel model, int x, int y) {
+        JComboBox<String> box = new JComboBox<>(model);
         box.setBounds(x, y, 118, 20);
 
         return box;
