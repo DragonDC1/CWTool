@@ -2,6 +2,7 @@ package de.fida.cwtool;
 
 import de.fida.cwtool.gui.Window;
 import org.apache.commons.collections4.CollectionUtils;
+//import de.fida.cwtool.libs.collections4.CollectionUtils;
 
 import java.io.*;
 import java.util.*;
@@ -96,7 +97,7 @@ public class Clan implements Serializable {
      */
     public boolean removeBuildCombination (List<Category> builds) {
         for (BuildCombination b : buildCombinations) {
-            if(CollectionUtils.isEqualCollection(b.getBuilds(), builds)) {
+            if(CollectionUtils.isEqualCollection(b.getlistBuilds(), builds)) {
                 return buildCombinations.remove(b);
             }
         }
@@ -125,7 +126,7 @@ public class Clan implements Serializable {
      */
     public boolean changeRatingBuildCombination (List<Category> builds, Rating newRating) {
         for (BuildCombination b : buildCombinations) {
-            if(CollectionUtils.isEqualCollection(b.getBuilds(), builds)) {
+            if(CollectionUtils.isEqualCollection(b.getlistBuilds(), builds)) {
                 b.setRating(newRating);
                 return true;
             }

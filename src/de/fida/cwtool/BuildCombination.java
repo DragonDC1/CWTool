@@ -8,17 +8,19 @@ public class BuildCombination implements Serializable {
     @Serial
     private static final long serialVersionUID = 2983901898052264780L;
     String name;
-    List<Category> builds = new ArrayList<>();
+    List<Category> listBuilds = new ArrayList<>();
     Rating rating;
+
+    private Category[] builds = new Category[4];
 
     public BuildCombination (String name, List<Category> builds, Rating rating) {
         this.name = name;
-        this.builds = builds;
+        this.listBuilds = builds;
         this.rating = rating;
     }
 
-    // FIXME: 29.05.2022 Raus mit die Viecher
-    public BuildCombination (List<Category> builds, Rating rating) {
+    public BuildCombination (String name, Category[] builds, Rating rating) {
+        this.name = name;
         this.builds = builds;
         this.rating = rating;
     }
@@ -34,10 +36,10 @@ public class BuildCombination implements Serializable {
      *  oder nicht hinzugefügt werden konnte
      */
     public boolean addBuild (Category build) {
-        if (this.builds.contains(build))
+        if (this.listBuilds.contains(build))
             return false;
         else
-            return this.builds.add(build);
+            return this.listBuilds.add(build);
     }
 
     /*
@@ -46,7 +48,7 @@ public class BuildCombination implements Serializable {
      *  Gibt false zurück, wenn der Build nicht in der Kombination ist
      */
     public boolean removeBuild (Category build) {
-        return this.builds.remove(build);
+        return this.listBuilds.remove(build);
     }
 
     @Override
@@ -59,15 +61,15 @@ public class BuildCombination implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(builds);
+        return Objects.hash(listBuilds);
     }
 
     public String toString () {
-        return builds.toString() + rating;
+        return listBuilds.toString() + rating;
     }
 
-    public List<Category> getBuilds() {
-        return builds;
+    public List<Category> getlistBuilds() {
+        return listBuilds;
     }
 
     public String getName() {
@@ -80,5 +82,9 @@ public class BuildCombination implements Serializable {
 
     public void setRating(Rating rating) {
         this.rating = rating;
+    }
+
+    public void setBuild(int index, Category build) {
+        builds[index] = build;
     }
 }
