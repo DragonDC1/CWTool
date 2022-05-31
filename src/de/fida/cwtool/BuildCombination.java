@@ -87,4 +87,8 @@ public class BuildCombination implements Serializable {
     public void setBuild(int index, Category build) {
         builds[index] = build;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
